@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=http://www.thymeleaf.org
+      xmlns:sec=http://www.thymeleaf.org/extras/spring-security
+      xmlns:shiro=http://www.pollix.at/thymeleaf/shiro>
+
+<head>
+    <meta charset="utf-8">
+    <title>Danh sách sản phẩm</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="/img/logo.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">-->
+    <link href="/ajax/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- topbar start -->
+<div th:replace="~{base-form/topbar :: #topbar}"></div>
+<!-- topbar end -->
+
+<!-- navbar start -->
+<div th:replace="~{base-form/navbar :: #navbar}"></div>
+<!-- navbar end -->
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="/home">Trang chủ</a>
+                <a class="breadcrumb-item text-dark"
+                   th:href="'/products/category/' + ${category.categoryId}"
+                   th:text="${category.categoryName}"
+                ></a>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Products Start -->
+<div class="row px-xl-5 cus-res-12">
+    <div class="col-lg-12">
+        <div class="container-fluid pt-5 pb-3">
+            <div class="row">
+                <div class="col-lg-6 header-dm-res">
+                    <h2 class="section-title text-uppercase mx-xl-5 mb-4">
+                        <span class="pr-3 header-dm-res-sp1" style="border-bottom: 2px solid #F27927;color: #F27927;"
+                              th:text="${category.categoryName}"></span>
+                    </h2>
+                </div>
+                <div class="col-lg-6 header-dm-res">
+                    <img src="/img/icon-filter.png" style="float: right; margin-right: 10px;" height="15px" width="15px"
+                         alt="">
+                </div>
+            </div>
+            <div class="row px-xl-5 dm-res">
+                <div th:if="${pageProductByCategory.getContent() != null && !pageProductByCategory.isEmpty()}"
+                     th:each="product : ${pageProductByCategory.getContent()}"
+                     class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-img position-relative overflow-hidden text-center">
+                            <img th:if="${productImageMap != null && !productImageMap.isEmpty() &&
+                    productImageMap.get(product.productId) != null}" class="img-fluid d-block"
+                                 th:src="${productImageMap.get(product.productId).url}" alt="">
+                            <img th:unless="${productImageMap != null && !productImageMap.isEmpty() &&
+                    productImageMap.get(product.productId) != null}" class="img-fluid d-block" src="/img/KM_1.png">
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate link-pd-res"
+                               th:if="${product.productTitle.length() > 50}"
+                               th:href="'/product-details/' + ${product.productId}"
+                               th:text="${#strings.substring(product.productTitle, 0, 50)} + (${product.productTitle.length() > 50 ? '...' : ''})"></a>
+                            <a class="h6 text-decoration-none text-truncate link-pd-res"
+                               th:unless="${product.productTitle.length() > 50}"
+                               th:href="'/product-details/' + ${product.productId}"
+                               th:text="${product.productTitle}"></a>
+                            <div class="d-flex align-items-center justify-content-center mt-2 text-res">
+                                <h6 class="text-muted">
+                                    <del>161.000</del>
+                                </h6>
+                                <h5 class="ml-2" style="color:#F27927">120.000</h5>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                            </div>
+                            <div class="mb-1 mt-2">
+                                <a class="btn btn-buy p-1"
+                                   style="color: white; background-color: #F27927; border-radius: 132px"
+                                   th:href="'/product-details/' + ${product.productId}">Xem sản phẩm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="paging">
+            <ul>
+                <li>Trang</li>
+                <li><a href="DetailProductByItem1.html">1</a></li>
+                <li><a href="DetailProductByItem2.html" class="active">2</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row px-xl-5 cus-res-9">
+    <div class="col-lg-9">
+        <div class="container-fluid pt-5 pb-3">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="section-title text-uppercase mx-xl-5 mb-4">
+                        <span class="pr-3" style="border-bottom: 2px solid #F27927;color: #F27927;"
+                              th:text="${category.categoryName}"></span>
+                    </h2>
+                </div>
+            </div>
+            <div class="row px-xl-5">
+                <div th:if="${pageProductByCategory.getContent() != null && !pageProductByCategory.getContent().isEmpty()}"
+                     th:each="product : ${pageProductByCategory.getContent()}"
+                     class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-img position-relative overflow-hidden d-flex justify-content-center">
+                            <a th:href="'/product-details/' + ${product.productId}">
+                                <img th:if="${productImageMap != null && !productImageMap.isEmpty() &&
+                    productImageMap.get(product.productId) != null}" class="img-fluid product_img d-block"
+                                     th:src="${productImageMap.get(product.productId).url}" alt="">
+                                <img th:unless="${productImageMap != null && !productImageMap.isEmpty() &&
+                    productImageMap.get(product.productId) != null}" class="img-fluid product_img d-block"
+                                     src="/img/KM_1.png">
+                            </a>
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate link-pd-res"
+                               th:if="${product.productTitle.length() > 50}"
+                               th:href="'/product-details/' + ${product.productId}"
+                               th:text="${#strings.substring(product.productTitle, 0, 50)} + (${product.productTitle.length() > 50 ? '...' : ''})"></a>
+                            <a class="h6 text-decoration-none text-truncate link-pd-res"
+                               th:unless="${product.productTitle.length() > 50}"
+                               th:href="'/product-details/' + ${product.productId}"
+                               th:text="${product.productTitle}"></a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h6 class="text-muted">
+                                    <del>161.000</del>
+                                </h6>
+                                <h5 class="ml-2" style="color:#F27927">120.000</h5>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                            </div>
+                            <div class="mb-1 mt-2">
+                                <a class="btn btn-buy p-1"
+                                   style="color: white; background-color: #F27927; border-radius: 132px"
+                                   th:href="'/product-details/' + ${product.productId}">Xem sản phẩm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="paging">
+            <ul>
+                <li>Trang</li>
+                <li th:if="${pageProductByCategory.getNumber() > 0}"
+                    class="sherah-pagination__button">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=0'">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() > 0}"
+                    class="sherah-pagination__button">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber()}">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() > 1}">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber() - 1}"
+                       th:text="${pageProductByCategory.getNumber() - 1}"></a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() > 0}">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber()}"
+                       th:text="${pageProductByCategory.getNumber()}"></a>
+                </li>
+                <li>
+                    <a class="active"
+                       th:text="${pageProductByCategory.getNumber() + 1}"></a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() < pageProductByCategory.getTotalPages() - 1}">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber() + 2}"
+                       th:text="${pageProductByCategory.getNumber() + 2}"></a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() + 1 < pageProductByCategory.getTotalPages() - 1}">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber() + 3}"
+                       th:text="${pageProductByCategory.getNumber() + 3}"></a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() < pageProductByCategory.getTotalPages() - 1}"
+                    class="sherah-pagination__button">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getNumber() + 2}">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li th:if="${pageProductByCategory.getNumber() < pageProductByCategory.getTotalPages() - 1}"
+                    class="sherah-pagination__button">
+                    <a th:href="'/products/category/' + ${category.categoryId} +'?page=' + ${pageProductByCategory.getTotalPages()}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3" style="color:#000">
+        <div style="display: flex; margin-left: 15px; box-sizing: border-box">
+            <div style="width: 150px;">
+                <p style="font-size: 20px;">BỘ LỌC</p>
+            </div>
+            <div style="width: 150px; float: right;">
+                <img src="/img/icon-filter.png" style="float: right;" height="30px" width="30px" alt="">
+            </div>
+        </div>
+        <!--Sắp xếp-->
+        <div style="display: flex; margin-left: 15px; margin-bottom: 10px; box-sizing: border-box;">
+            <strong>Sắp xếp</strong>
+        </div>
+        <input type="checkbox" id="hangmoive" style="margin-left:15px" name="hangmoive" value="hangmoive">
+        <label for="hangmoive"> Hàng mới về</label><br>
+        <input type="checkbox" id="giamgia" style="margin-left:15px" name="giamgia" value="giamgia">
+        <label for="giamgia"> Giảm giá</label><br>
+        <input type="checkbox" id="giatangdan" style="margin-left:15px" name="giatangdan" value="giatangdan">
+        <label for="giatangdan"> Giá tăng dần</label><br>
+        <input type="checkbox" id="giagiamdan" style="margin-left:15px" name="giagiamdan" value="giagiamdan">
+        <label for="giagiamdan"> Giá giảm dần</label><br>
+        <input type="checkbox" id="az" style="margin-left:15px" name="az" value="az">
+        <label for="az"> A - Z</label><br>
+        <input type="checkbox" id="za" style="margin-left:15px" name="za" value="za">
+        <label for="za"> Z - A</label><br>
+        <!--Danh mục-->
+        <div style="display: flex; margin-left: 15px;margin-top:25px;margin-bottom: 15px; box-sizing: border-box;">
+            <strong>Danh mục sản phẩm</strong>
+        </div>
+        <input type="checkbox" id="thucan" style="margin-left:15px" name="thucan" value="thucan">
+        <label for="thucan"> Thức ăn</label><br>
+        <input type="checkbox" id="catvesinh" style="margin-left:15px" name="catvesinh" value="catvesinh">
+        <label for="catvesinh"> Cát vệ sinh</label><br>
+        <input type="checkbox" id="sanphamvesinh" style="margin-left:15px" name="sanphamvesinh" value="sanphamvesinh">
+        <label for="sanphamvesinh"> Sản phẩm vệ sinh, chăm sóc</label><br>
+        <input type="checkbox" id="chamsocyte" style="margin-left:15px" name="chamsocyte" value="chamsocyte">
+        <label for="chamsocyte"> Chăm sóc y tế</label><br>
+        <input type="checkbox" id="vatdunganuong" style="margin-left:15px" name="vatdunganuong" value="vatdunganuong">
+        <label for="vatdunganuong"> Vật dụng ăn uống</label><br>
+        <input type="checkbox" id="dungcuvesinh" style="margin-left:15px" name="dungcuvesinh" value="dungcuvesinh">
+        <label for="dungcuvesinh"> Dụng cụ vệ sinh</label><br>
+        <input type="checkbox" id="chuong" style="margin-left:15px" name="chuong" value="chuong">
+        <label for="chuong"> Chuồng, giường, nhà</label><br>
+        <input type="checkbox" id="vongco" style="margin-left:15px" name="vongco" value="vongco">
+        <label for="vongco"> Vòng cổ, dây dắt, rọ mõm</label><br>
+        <input type="checkbox" id="quanao" style="margin-left:15px" name="quanao" value="quanao">
+        <label for="quanao"> Quần áo, đồ chơi</label><br>
+        <input type="checkbox" id="dochoi" style="margin-left:15px" name="dochoi" value="dochoi">
+        <label for="dochoi"> Đồ chơi</label><br>
+        <!--Khoảng giá-->
+        <div style="display: flex; margin-left: 15px;margin-top:25px;margin-bottom: 15px; box-sizing: border-box;">
+            <strong>Khoảng giá</strong>
+        </div>
+        <input type="checkbox" id="duoi50" style="margin-left:15px" name="duoi50" value="duoi50">
+        <label for="duoi50"> Dưới 50.000</label><br>
+        <input type="checkbox" id="tu50" style="margin-left:15px" name="tu50" value="tu50">
+        <label for="tu50"> Từ 50.000 - 100.000</label><br>
+        <input type="checkbox" id="tu100" style="margin-left:15px" name="tu100" value="tu100">
+        <label for="tu100"> Từ 100.000 - 200.000</label><br>
+        <input type="checkbox" id="tu200" style="margin-left:15px" name="tu200" value="tu200">
+        <label for="tu200"> Từ 200.000 - 300.000</label><br>
+        <input type="checkbox" id="tu300" style="margin-left:15px" name="tu300" value="tu300">
+        <label for="tu300"> Từ 300.000 - 500.000</label><br>
+        <input type="checkbox" id="tu500" style="margin-left:15px" name="tu500" value="tu500">
+        <label for="tu500"> Từ 500.000 - 700.000</label><br>
+        <input type="checkbox" id="tu700" style="margin-left:15px" name="tu700" value="tu700">
+        <label for="tu700"> Từ 700.000 - 1.000.000</label><br>
+        <input type="checkbox" id="tren100" style="margin-left:15px" name="tren100" value="tren100">
+        <label for="tren100"> Trên 1 triệu</label><br>
+    </div>
+</div>
+
+<!-- Products End -->
+
+<!-- footer start -->
+<div th:replace="~{base-form/footer :: #footer}"></div>
+<!-- footer end -->
+
+
+<!-- Back to Top -->
+<a href="#" class="btn back-to-top" style="background-color: #63ea81; width: 20px; color: white"><i
+        class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+<!--<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>-->
+<script src="/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Contact Javascript File -->
+<script src="/mail/jqBootstrapValidation.min.js"></script>
+<script src="/mail/contact.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+</body>
+
+</html>
